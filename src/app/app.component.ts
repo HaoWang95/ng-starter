@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { of, from, Observable } from 'rxjs';
-import {map, tap, take} from 'rxjs/operators'
+import { from, throwError } from 'rxjs';
+import {map, tap, take, catchError} from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +13,12 @@ export class AppComponent implements OnInit {
   ngOnInit(){
     from([1,2,3,4,5,6,7])
       .pipe(
+        catchError(
+          err => {
+            console.log(err)
+            return throwError(err)
+          }
+        ),
         tap(item => console.log(`${item} is emitted, perform ops`)),
         map(item => item += 3),
         take(5)
